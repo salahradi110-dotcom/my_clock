@@ -1,41 +1,36 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ساعتي الخاصة</title>
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #000000; /* خلفية سوداء لتوفير البطارية */
-            color: #00ffcc; /* لون أخضر فسفوري عصري */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-        #clock {
-            font-size: 5rem;
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
-        }
+        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .clock { width: 280px; height: 280px; border: 8px solid #d4af37; border-radius: 50%; position: relative; background: radial-gradient(circle, #1a1a1a, #000); box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: #fff; border-radius: 5px; transform: translateX(-50%); }
+        .hour { width: 8px; height: 60px; background: #d4af37; z-index: 3; }
+        .min { width: 5px; height: 90px; background: #eee; z-index: 2; }
+        .sec { width: 2px; height: 110px; background: #ff4500; z-index: 1; }
+        .center { position: absolute; top: 50%; left: 50%; width: 15px; height: 15px; background: #d4af37; border-radius: 50%; transform: translate(-50%, -50%); z-index: 4; }
     </style>
 </head>
 <body>
-    <div id="clock">00:00:00</div>
-
+    <div class="clock">
+        <div class="center"></div>
+        <div id="hour" class="hand hour"></div>
+        <div id="min" class="hand min"></div>
+        <div id="sec" class="hand sec"></div>
+    </div>
     <script>
-        function updateClock() {
+        function update() {
             const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+            const s = now.getSeconds() * 6;
+            const m = now.getMinutes() * 6;
+            const h = (now.getHours() % 12) * 30 + (now.getMinutes() / 2);
+            document.getElementById('sec').style.transform = `translateX(-50%) rotate(${s}deg)`;
+            document.getElementById('min').style.transform = `translateX(-50%) rotate(${m}deg)`;
+            document.getElementById('hour').style.transform = `translateX(-50%) rotate(${h}deg)`;
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(update, 1000); update();
     </script>
 </body>
 </html>
